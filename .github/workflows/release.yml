@@ -33,8 +33,12 @@ jobs:
           artifacts="$docker_artifact,$chart_artifact"
           echo "artifacts=$artifacts" >> $GITHUB_OUTPUT
 
-      - name: Publish Release
-        uses: ncipollo/release-action@v1
+      # Upload artifacts 
+      - name: Upload  Docker Compose tar.gz
+        uses: actions/upload-artifact@v3
         with:
-          artifacts: ${{ steps.package_artifact.outputs.artifacts }}
+          name: packaged-files
+          path: |
+            csghub-docker-compose-v0.9.8.tgz
+            csghub-helm-chart-v0.9.8.tgz
           
