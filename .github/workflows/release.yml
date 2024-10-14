@@ -30,11 +30,11 @@ jobs:
           chart_artifact="csghub-helm-chart-${{ github.ref_name }}.tgz"
           tar -zcf $docker_artifact docker-compose/csghub
           tar -zcf $chart_artifact docker-compose/csghub
-          echo "DOCKER_ARTIFACT_PATH=$docker_artifact" >> $GITHUB_ENV
-          echo "CHART_ARTIFACT_PATH=$chart_artifact" >> $GITHUB_ENV
+          artifacts="$docker_artifact,$chart_artifact"
+          echo "artifacts=$artifacts" >> $GITHUB_OUTPUT
 
-      - name: Upload  Artifact
-        uses: actions/upload-artifact@v3
+      - name: Publish Release
+        uses: ncipollo/release-action@v1
         with:
-          name: packaged-files
-          path: ${{ env.DOCKER_ARTIFACT_PATH }},${{ env.CHART_ARTIFACT_PATH }}
+          artifacts: ${{ steps.package_artifact.outputs.artifacts }}
+          
