@@ -30,11 +30,11 @@ jobs:
           chart_artifact="csghub-helm-chart-${{ github.ref_name }}.tgz"
           tar -zcf $docker_artifact docker-compose/csghub
           tar -zcf $chart_artifact docker-compose/csghub
-          echo "::set-output name=docker_artifact::$docker_artifact"
-          echo "::set-output name=chart_artifact::$chart_artifact"
+          echo "DOCKER_ARTIFACT_PATH=$docker_artifact" >> $GITHUB_ENV
+          echo "CHART_ARTIFACT_PATH=$chart_artifact" >> $GITHUB_ENV
 
       - name: Upload  Artifact
         uses: actions/upload-artifact@v3
         with:
           name: packaged-files
-          path: ${{ steps.package_artifact.outputs.docker_artifact }},${{ steps.package_artifact.outputs.chart_artifact }}
+          path: ${{ env.DOCKER_ARTIFACT_PATH }},${{ env.CHART_ARTIFACT_PATH }}
