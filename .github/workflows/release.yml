@@ -22,18 +22,6 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Install Helm
-        uses: azure/setup-helm@v4
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-
-      - name: Run chart-releaser
-        id: chart-releaser
-        uses: helm/chart-releaser-action@v1.6.0
-        with:
-          charts_dir: helm-chart/charts
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Package Custom Artifact
         id: package_artifact
@@ -41,7 +29,7 @@ jobs:
           docker_artifact="csghub-docker-compose-${{ github.ref_name }}.tgz"
           chart_artifact="csghub-helm-chart-${{ github.ref_name }}.tgz"
           tar -zcf $docker_artifact docker-compose/csghub
-          tar -zcf $chart_artifact helm-chart/charts/csghub
+          tar -zcf $chart_artifact docker-compose/csghub
           echo "::set-output name=docker_artifact::$docker_artifact"
           echo "::set-output name=chart_artifact::$chart_artifact"
 
